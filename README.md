@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PetShop · Arquitetura X4
 
-## Getting Started
+Projeto modelo de referência para o ebook **PetShop · Arquitetura X4 com Next.js** (Paulo Odilon).
 
-First, run the development server:
+## Tecnologias
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Next.js 16** (App Router)
+- **TypeScript**
+- **React 19**
+- **Drizzle ORM** + **SQLite** (better-sqlite3)
+- **Tailwind CSS**
+
+## Arquitetura X4
+
+```
+src/
+├── app/                    # Rotas Next.js (páginas + API)
+├── components/             # Peças visuais puras (só props)
+├── hooks/                  # Gerente de estado da tela
+├── actions/                # Ações da interface (fetch → API)
+├── modules/pets/           # Domínio de negócio
+│   ├── dto/                # Contratos (Omit/Pick)
+│   ├── handlers/           # Entrada do domínio
+│   ├── usecases/           # Regras de negócio
+│   └── repositories/       # Acesso ao banco
+├── infrastructure/         # Drizzle + SQLite
+└── shared/                 # Tipos e mocks (não importa nada)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Como rodar
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Instalar dependências
+npm install
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Criar tabelas no banco (rodar uma vez)
+npm run db:generate
+npm run db:migrate
 
-## Learn More
+# Iniciar o servidor de desenvolvimento
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Acesse [http://localhost:3000](http://localhost:3000) e clique em **Ver Pets Cadastrados**.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Fluxo ponta a ponta
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+Component → Hook → Action → fetch("/api/pets")
+                              ↓
+                         route.ts → Handler → Use Case → Repository → SQLite
+```
 
-## Deploy on Vercel
+## Scripts úteis
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Comando | Descrição |
+|---------|-----------|
+| `npm run dev` | Servidor de desenvolvimento |
+| `npm run build` | Build de produção |
+| `npm run db:generate` | Gera migrations a partir do schema |
+| `npm run db:migrate` | Executa migrations no SQLite |
+| `npm run db:studio` | Abre o Drizzle Studio |
