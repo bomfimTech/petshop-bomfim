@@ -1,10 +1,19 @@
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import {
+  pgTable,
+  serial,
+  text,
+  timestamp,
+} from "drizzle-orm/pg-core";
 
-export const tabelaPets = sqliteTable("pets", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const tabelaPets = pgTable("pets", {
+  id: serial("id").primaryKey(),
   nome: text("nome").notNull(),
   especie: text("especie").notNull(),
   dono: text("dono").notNull(),
   raca: text("raca"),
-  criadoEm: text("criado_em").notNull(),
-});
+  criadoEm: timestamp("criado_em", {
+    withTimezone: true,
+  })
+    .defaultNow()
+    .notNull(),
+}).enableRLS();

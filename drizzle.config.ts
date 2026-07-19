@@ -1,10 +1,22 @@
+import "dotenv/config";
 import { defineConfig } from "drizzle-kit";
+
+const databaseUrl =
+  process.env.MIGRATION_DATABASE_URL ??
+  process.env.DATABASE_URL;
+
+if (!databaseUrl) {
+  throw new Error(
+    "MIGRATION_DATABASE_URL ou DATABASE_URL não configurada.",
+  );
+}
 
 export default defineConfig({
   schema: "./src/infrastructure/schemas/schema-pets.ts",
   out: "./drizzle",
-  dialect: "sqlite",
+  dialect: "postgresql",
+
   dbCredentials: {
-    url: "./petshop.db",
+    url: databaseUrl,
   },
 });

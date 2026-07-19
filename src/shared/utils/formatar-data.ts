@@ -1,17 +1,13 @@
-export function formatarDataCriacao(valor: string): string {
-  if (!valor?.trim()) return "—";
-
-  const data = new Date(valor);
+export function formatarDataCriacao(
+  valor: string | Date,
+): string {
+  const data =
+    valor instanceof Date
+      ? valor
+      : new Date(valor);
 
   if (Number.isNaN(data.getTime())) {
-    const apenasData = valor.split("T")[0];
-    const partes = apenasData.split("-");
-
-    if (partes.length === 3 && partes.every((p) => /^\d+$/.test(p))) {
-      return `${partes[2]}/${partes[1]}/${partes[0]}`;
-    }
-
-    return valor;
+    return "—";
   }
 
   return data.toLocaleString("pt-BR", {
@@ -20,5 +16,6 @@ export function formatarDataCriacao(valor: string): string {
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
+    timeZone: "America/Fortaleza",
   });
 }

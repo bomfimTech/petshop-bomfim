@@ -1,12 +1,12 @@
 {
   "version": "7",
-  "dialect": "sqlite",
+  "dialect": "postgresql",
   "entries": [
     {
       "idx": 0,
-      "version": "6",
-      "when": 1781013556408,
-      "tag": "0000_harsh_cassandra_nova",
+      "version": "7",
+      "when": 1784449686825,
+      "tag": "0000_fancy_darkhawk",
       "breakpoints": true
     }
   ]

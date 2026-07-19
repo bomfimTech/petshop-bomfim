@@ -1,8 +1,19 @@
-import Database from "better-sqlite3";
-import { drizzle } from "drizzle-orm/better-sqlite3";
-import path from "path";
+import "server-only";
 
-const dbPath = path.join(process.cwd(), "petshop.db");
-const sqlite = new Database(dbPath);
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
 
-export const db = drizzle(sqlite);
+const connectionString = process.env.DATABASE_URL;
+
+if (!connectionString) {
+  throw new Error(
+    "A variável de ambiente DATABASE_URL não foi configurada.",
+  );
+}
+
+// O Transaction Pooler não suporta prepared statements.
+const client = postgres(connectionString, {
+  prepare: false,
+});
+
+export const db = drizzle(client);
