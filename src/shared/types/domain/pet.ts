@@ -6,3 +6,5 @@ export interface Pet {
   raca?: string;
   criadoEm: string;
 }
+
+export type NovoPet = Omit<Pet, "id" | "criadoEm">;

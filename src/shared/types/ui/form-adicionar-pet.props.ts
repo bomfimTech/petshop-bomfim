@@ -1,6 +1,6 @@
-import type { CriarPetDto } from "@/modules/pets/dto/criar-pet.dto";
+import type { NovoPet } from "@/shared/types/domain/pet";
 
 export interface FormAdicionarPetProps {
-  onSubmit: (dados: CriarPetDto) => void;
+  onSubmit: (dados: NovoPet) => void;
   salvando?: boolean;
 }

@@ -1,3 +1,3 @@
-import type { Pet } from "@/shared/types/domain/pet";
+import type { NovoPet } from "@/shared/types/domain/pet";
 
-export type CriarPetDto = Omit<Pet, "id" | "criadoEm">;
+export type CriarPetDto = NovoPet;

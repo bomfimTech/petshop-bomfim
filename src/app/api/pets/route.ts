@@ -1,10 +1,10 @@
 import { criarPetHandler } from "@/modules/pets/handlers/criar-pet.handler";
+import { listarPetsHandler } from "@/modules/pets/handlers/listar-pets.handler";
 import type { CriarPetDto } from "@/modules/pets/dto/criar-pet.dto";
-import { repositorioPet } from "@/modules/pets/repositories/repositorio-pet";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
-  const pets = await repositorioPet.buscarTodos();
+  const pets = await listarPetsHandler();
   return NextResponse.json(pets);
 }
 

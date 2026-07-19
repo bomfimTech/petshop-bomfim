@@ -199,6 +199,57 @@ Supabase PostgreSQL
 
 O ponto central da Arquitetura X4 é este: **só a camada de infraestrutura conhece o PostgreSQL**. As camadas de cima (componente, hook, action, domínio) continuam iguais, não importa se o banco é SQLite ou PostgreSQL.
 
+> **Observe uma regra importante do fluxo:** **todas** as rotas de API deste projeto passam pela cadeia completa `Rota → Handler → Use Case → Repository`. Isso vale tanto para gravar (`POST /api/pets`) quanto para ler (`GET /api/pets`) e remover (`DELETE /api/pets/[id]`). Nenhuma rota "pula" camadas para falar direto com o repositório. Manter esse padrão uniforme é o que garante o desacoplamento na prática.
+
+---
+
+## 5.1 Por que respeitar a arquitetura (Swap Without Collapse)
+
+Talvez a pergunta mais importante para um iniciante seja: **"por que tanta camada? não seria mais simples chamar o banco direto no componente?"**
+
+No começo, sim — pareceria mais simples. Mas em pouco tempo o projeto viraria uma bola de neve difícil de manter. A Arquitetura X4 aplica um princípio chamado **Swap Without Collapse** (*trocar sem colapsar*):
+
+```text
+Você pode SUBSTITUIR uma peça do sistema (o banco, por exemplo)
+sem que as outras peças DESABEM junto.
+```
+
+Neste repositório isso é real: a migração de **SQLite → PostgreSQL** mexeu **apenas** em 3 arquivos de infraestrutura (`db.ts`, `schema-pets.ts` e, quando a sintaxe muda, o `repositorio-pet.ts`). Componentes, hooks, actions, regras de negócio e tipos de domínio **não foram tocados**. Isso só foi possível porque a tecnologia de banco está confinada em um único lugar.
+
+### O que a arquitetura entrega, na prática
+
+| Benefício | Como a arquitetura garante isso |
+|-----------|--------------------------------|
+| 🪶 **Enxuto** | Cada arquivo tem **uma responsabilidade só**. O componente desenha a tela, o use case valida a regra, o repositório fala com o banco. Fica fácil achar e mudar as coisas, sem código repetido nem "arquivos gigantes que fazem tudo". |
+| 🔒 **Seguro** | A conexão com o banco vive **só no servidor**. O `db.ts` usa `import "server-only"`, então nenhuma tela consegue importar a senha do banco por acidente. As credenciais nunca chegam ao navegador. |
+| 📈 **Escalável** | Como as camadas são independentes, dá para **crescer sem reescrever tudo**: trocar o banco, adicionar cache, criar novos módulos (ex.: `agendamentos`, `vendas`) reaproveitando o mesmo padrão. |
+| ⚡ **Performático** | Isolar a infraestrutura permite **otimizar em um ponto só** (pool de conexões, `prepare: false`, timeouts do serverless no `db.ts`) sem espalhar essa complexidade pelo resto do código. |
+
+### O que aconteceria se a arquitetura fosse desrespeitada
+
+Para entender o valor das regras, imagine violá-las:
+
+- **Componente acessando o banco direto** → o segredo do banco vazaria para o navegador (**falha de segurança grave**) e a tela quebraria a cada troca de banco (**colapso**).
+- **Regra de negócio dentro do componente** → a mesma validação seria copiada em vários lugares; corrigir um bug exigiria caçar cópias espalhadas (**não é enxuto**).
+- **Rota falando direto com o Drizzle** → trocar o ORM obrigaria a mexer em todas as rotas (**não é escalável**).
+- **`shared` dependendo de módulos de negócio** → criaria um "nó" de dependências circulares que trava o build e confunde o crescimento do sistema.
+
+### As regras de ouro deste projeto
+
+```text
+Componentes recebem dados por props e NÃO acessam o banco.
+Hooks cuidam do estado da tela e NÃO acessam o banco.
+Actions conversam com a API via fetch.
+Rotas traduzem HTTP e chamam Handlers.
+Handlers normalizam a entrada e chamam Use Cases.
+Use Cases contêm as regras de negócio e chamam Repositories.
+Repositories são a ÚNICA porta para o banco (via Drizzle).
+Infrastructure guarda a tecnologia concreta (conexão + schema).
+Shared é uma "folha": tipos e utilitários que NÃO dependem de ninguém acima.
+```
+
+> **Resumo para levar para a vida:** respeitar a arquitetura não é burocracia — é o que torna o sistema **enxuto** (fácil de ler), **seguro** (segredos no servidor), **escalável** (cresce sem reescrever) e **performático** (otimização concentrada). O preço de ignorá-la aparece depois, quando qualquer mudança pequena "derruba" o sistema inteiro.
+
 ---
 
 ## 6. Por que o SQLite foi substituído
