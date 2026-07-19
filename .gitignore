@@ -46,3 +46,6 @@ petshop.db-journal
 
 .vercel
 .env*
+
+# exceção: o modelo de variáveis DEVE ser versionado
+!.env.example
