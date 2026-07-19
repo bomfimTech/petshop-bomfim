@@ -43,3 +43,6 @@ next-env.d.ts
 # sqlite
 petshop.db
 petshop.db-journal
+
+.vercel
+.env*
