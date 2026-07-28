@@ -833,12 +833,38 @@ Scripts que **realmente existem** no `package.json`:
 | `npm run db:migrate` | Aplica as migrations pendentes no PostgreSQL |
 | `npm run db:push` | Sincroniza o schema direto com o banco (sem gerar arquivos) |
 | `npm run db:studio` | Abre o Drizzle Studio para visualizar os dados |
+| `npm test` | Roda a suíte Jest (79 testes — sem banco; 82 no total com E2E) |
+| `npm run test:watch` | Testes Jest em modo observação |
+| `npm run test:cov` | Testes Jest com relatório de cobertura |
+| `npm run test:e2e` | Testes Playwright em `/pets` (requer banco) |
 
 **Diferença entre `push`, `generate` e `migrate`:**
 
 - **`db:push`** — aplica o schema **direto** no banco, sem criar arquivos de migration. Rápido para aulas e protótipos.
 - **`db:generate`** — cria os **arquivos SQL** de migration (o histórico versionado), mas **não** aplica no banco.
 - **`db:migrate`** — **aplica** os arquivos de migration gerados no banco. É o par do `db:generate` no fluxo profissional.
+
+---
+
+## Testes
+
+Este repositório inclui uma suíte completa de testes (Jest + Playwright) como material de aula da **Arquitetura X4**.
+
+| Resumo | Valor |
+|---|---|
+| **Total** | **82 testes** (79 Jest + 3 Playwright) |
+| Testes Jest | **79** (16 suítes) |
+| Cobertura | **100%** em statements, branches, functions e lines |
+| E2E | **3** cenários em `e2e/pets.spec.ts` — requer banco configurado |
+
+```bash
+npm install
+npm test          # 79 testes Jest — não precisa de .env
+npm run test:cov  # com relatório de cobertura
+npm run test:e2e  # +3 Playwright — requer DATABASE_URL
+```
+
+Guia completo para iniciantes: **[TESTES.md](./TESTES.md)** — onde cada teste mora, como ler falhas, erros comuns e como destravar o E2E.
 
 ---
 

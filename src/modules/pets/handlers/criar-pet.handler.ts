@@ -12,7 +12,7 @@ export async function criarPetHandler(dados: CriarPetDto): Promise<PetRespostaDt
     nome: capitalizarPrimeiraLetra(dados.nome.trim()),
     especie: dados.especie.trim().toLowerCase(),
     dono: dados.dono.trim(),
-    ...(dados.raca ? { raca: dados.raca.trim() } : {}),
+    ...(dados.raca?.trim() ? { raca: dados.raca.trim() } : {}),
   };
 
   return criarPetUseCase(dadosNormalizados);
