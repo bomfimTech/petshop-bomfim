@@ -156,4 +156,15 @@ describe("criarPetHandler", () => {
     // VERIFICAR
     expect(useCaseMock).toHaveBeenCalledTimes(1);
   });
+
+  // Tarefa 4 — Nome de uma letra também é capitalizado
+  test("deve capitalizar quando o nome tiver uma letra só", async () => {
+    // AGIR
+    await criarPetHandler({ nome: "r", especie: "cachorro", dono: "Ana Silva" });
+
+    // VERIFICAR
+    expect(useCaseMock).toHaveBeenCalledWith(
+      expect.objectContaining({ nome: "R" })
+    );
+  });
 });

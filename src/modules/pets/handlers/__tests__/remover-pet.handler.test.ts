@@ -29,4 +29,14 @@ describe("removerPetHandler", () => {
     expect(useCaseMock).toHaveBeenCalledWith(7);
     expect(useCaseMock).toHaveBeenCalledTimes(1);
   });
+
+  // Tarefa 7 — Repasse puro do handler
+  test("deve repassar o id ao use case exatamente uma vez", async () => {
+    // AGIR
+    await removerPetHandler(7);
+
+    // VERIFICAR
+    expect(useCaseMock).toHaveBeenCalledWith(7);
+    expect(useCaseMock).toHaveBeenCalledTimes(1);
+  });
 });

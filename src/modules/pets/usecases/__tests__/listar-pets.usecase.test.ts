@@ -43,4 +43,16 @@ describe("listarPetsUseCase", () => {
     // VERIFICAR
     expect(resultado).toEqual([]);
   });
+
+  // Tarefa 3 — O banco é consultado uma vez só
+  test("deve consultar o repositório exatamente uma vez", async () => {
+    // PREPARAR
+    buscarTodosMock.mockResolvedValue([]);
+
+    // AGIR
+    await listarPetsUseCase();
+
+    // VERIFICAR
+    expect(buscarTodosMock).toHaveBeenCalledTimes(1);
+  });
 });

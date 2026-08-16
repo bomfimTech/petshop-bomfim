@@ -68,4 +68,15 @@ describe("CardPet", () => {
     // VERIFICAR
     expect(aoRemover).toHaveBeenCalledWith(7);
   });
+
+  // Tarefa 5 — A data de cadastro aparece no card
+  test("deve exibir a data de cadastro do pet", () => {
+    // PREPARAR + AGIR
+    render(
+      <CardPet pet={criarPetFake({ criadoEm: "25/12/2024" })} onRemover={jest.fn()} />
+    );
+
+    // VERIFICAR
+    expect(screen.getByText(/25\/12\/2024/)).toBeInTheDocument();
+  });
 });

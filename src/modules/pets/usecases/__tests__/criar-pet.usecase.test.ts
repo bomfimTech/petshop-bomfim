@@ -86,4 +86,16 @@ describe("criarPetUseCase", () => {
 
     expect(salvarMock).not.toHaveBeenCalled();
   });
+
+  // Tarefa 1 — Nome com exatamente 2 letras é aceito
+  test("deve aceitar nome com exatamente 2 letras", async () => {
+    // PREPARAR
+    const pet = { nome: "Bo", especie: "cachorro", dono: "Ana Silva" };
+
+    // AGIR
+    await criarPetUseCase(pet);
+
+    // VERIFICAR
+    expect(salvarMock).toHaveBeenCalledWith(pet);
+  });
 });

@@ -110,4 +110,21 @@ describe("FormAdicionarPet", () => {
     expect(botao).toBeDisabled();
     expect(botao).toHaveTextContent("Salvando...");
   });
+
+  // Tarefa 6 — As quatro espécies estão no select
+  test("deve oferecer exatamente as quatro espécies válidas", () => {
+    // PREPARAR + AGIR
+    render(<FormAdicionarPet onSubmit={jest.fn()} />);
+
+    // VERIFICAR
+    const opcoes = screen.getAllByRole("option") as HTMLOptionElement[];
+
+    expect(opcoes).toHaveLength(4);
+    expect(opcoes.map((o) => o.value)).toEqual([
+      "cachorro",
+      "gato",
+      "coelho",
+      "hamster",
+    ]);
+  });
 });

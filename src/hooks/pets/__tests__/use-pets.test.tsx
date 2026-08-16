@@ -287,4 +287,21 @@ describe("usePets", () => {
       "Erro desconhecido"
     );
   });
+
+  // Tarefa 9 — Lista vazia não é erro
+  test("deve exibir lista vazia sem erro quando a API não devolver pets", async () => {
+    // PREPARAR
+    listarMock.mockResolvedValue([]);
+
+    // AGIR
+    render(<Cobaia />);
+
+    // VERIFICAR — espera sair do "Carregando..."
+    await waitFor(() => {
+      expect(screen.queryByText("Carregando pets...")).not.toBeInTheDocument();
+    });
+
+    // e agora: o alerta de erro NÃO pode estar na tela
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+  });
 });

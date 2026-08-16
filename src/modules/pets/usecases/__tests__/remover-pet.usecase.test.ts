@@ -59,4 +59,16 @@ describe("removerPetUseCase", () => {
     // VERIFICAR
     expect(removerMock).not.toHaveBeenCalled();
   });
+
+  // Tarefa 2 — Consulta com o id certo antes de apagar
+  test("deve consultar o pet pelo id recebido antes de remover", async () => {
+    // PREPARAR — o mock precisa "achar" um pet, senão o use case lança erro
+    buscarPorIdMock.mockResolvedValue({ id: 42, nome: "Rex" });
+
+    // AGIR
+    await removerPetUseCase(42);
+
+    // VERIFICAR
+    expect(buscarPorIdMock).toHaveBeenCalledWith(42);
+  });
 });

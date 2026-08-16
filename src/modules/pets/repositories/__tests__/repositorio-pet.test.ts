@@ -241,4 +241,30 @@ describe("repositorioPet", () => {
       expect(whereMock).toHaveBeenCalled();
     });
   });
+
+  // Tarefa 10 (desafio) — A data também é formatada no buscarPorId
+  test("buscarPorId deve formatar a data antes de devolver o DTO", async () => {
+    // PREPARAR — uma linha crua, como viria do banco
+    const linha = {
+      id: 1,
+      nome: "Rex",
+      especie: "cachorro",
+      dono: "Ana",
+      raca: null,
+      criadoEm: new Date(),
+    };
+
+    // a escada: select() devolve algo com from(), que devolve algo com where()
+    selectMock.mockReturnValue({
+      from: jest.fn().mockReturnValue({
+        where: jest.fn().mockResolvedValue([linha]),
+      }),
+    });
+
+    // AGIR
+    const pet = await repositorioPet.buscarPorId(1);
+
+    // VERIFICAR — o mock do formatar-data devolve sempre a mesma string
+    expect(pet?.criadoEm).toBe("10/01/2024");
+  });
 });
