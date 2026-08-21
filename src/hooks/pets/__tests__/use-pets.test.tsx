@@ -304,4 +304,21 @@ describe("usePets", () => {
     // e agora: o alerta de erro NÃO pode estar na tela
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
+
+ test("deve manter a lista na tela quando removerPet falhar", async () => {
+  // PREPARAR
+  const user = userEvent.setup();
+  listarMock.mockResolvedValue([criarPetFake({ id: 1, nome: "Rex" })]);
+  removerMock.mockRejectedValueOnce(new Error("Erro ao remover pet"));
+
+  // AGIR
+  render(<Cobaia />);
+  await screen.findByText("Rex");
+  await user.click(screen.getByRole("button", { name: /remover/i }));
+  await screen.findByRole("alert");
+
+  // VERIFICAR
+  expect(screen.getByText("Rex")).toBeInTheDocument();
+});
+
 });
