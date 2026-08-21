@@ -127,4 +127,22 @@ describe("FormAdicionarPet", () => {
       "hamster",
     ]);
   });
+
+  test("deve enviar a raça sem os espaços laterais", async () => {
+    // PREPARAR
+    const user = userEvent.setup();
+    render(<FormAdicionarPet onSubmit={onSubmitMock} />);
+
+    // AGIR
+    await user.type(screen.getByLabelText("Nome do pet"), "Rex");
+    await user.type(screen.getByLabelText("Dono"), "Ana Silva");
+    await user.type(screen.getByLabelText("Raça (opcional)"), " Labrador ");
+    await user.click(screen.getByRole("button", { name: /adicionar pet/i }));
+
+    // VERIFICAR
+    expect(onSubmitMock).toHaveBeenCalledWith(
+    expect.objectContaining({ raca: "Labrador" })
+    );
+});
+
 });
