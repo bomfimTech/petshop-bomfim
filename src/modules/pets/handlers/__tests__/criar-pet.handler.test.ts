@@ -167,4 +167,21 @@ describe("criarPetHandler", () => {
       expect.objectContaining({ nome: "R" })
     );
   });
+
+  test("NÃO deve alterar o objeto recebido ao normalizar", async () => {
+    // PREPARAR
+    const entrada = {
+        nome: " rEX ",
+        especie: " CACHORRO ",
+        dono: " Ana Silva ",
+    };
+    const copiaOriginal = { ...entrada };
+
+    // AGIR
+    await criarPetHandler(entrada);
+
+    // VERIFICAR
+    expect(entrada).toEqual(copiaOriginal);
+});
+
 });

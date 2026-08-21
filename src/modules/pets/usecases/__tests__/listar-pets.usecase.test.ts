@@ -55,4 +55,19 @@ describe("listarPetsUseCase", () => {
     // VERIFICAR
     expect(buscarTodosMock).toHaveBeenCalledTimes(1);
   });
+
+  test("deve devolver a mesma lista do repositório, sem copiar", async () => {
+    // PREPARAR
+    const lista = [
+        { id: 1, nome: "Rex", especie: "cachorro", dono: "Ana", criadoEm: "10/01/2024" },
+    ];
+    buscarTodosMock.mockResolvedValue(lista);
+
+    // AGIR
+    const resultado = await listarPetsUseCase();
+
+    // VERIFICAR — exige a MESMA referência, não só o mesmo conteúdo
+    expect(resultado).toBe(lista);
+});
+
 });

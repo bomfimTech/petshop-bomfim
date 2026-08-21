@@ -98,4 +98,16 @@ describe("criarPetUseCase", () => {
     // VERIFICAR
     expect(salvarMock).toHaveBeenCalledWith(pet);
   });
+
+  test("deve aceitar dono com exatamente 3 caracteres", async () => {
+    // PREPARAR
+    const pet = { ...petValido, dono: "Ana" };
+
+    // AGIR
+    await criarPetUseCase(pet);
+
+    // VERIFICAR
+    expect(salvarMock).toHaveBeenCalledWith(pet);
+});
+
 });

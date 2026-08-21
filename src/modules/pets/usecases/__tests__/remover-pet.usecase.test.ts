@@ -71,4 +71,13 @@ describe("removerPetUseCase", () => {
     // VERIFICAR
     expect(buscarPorIdMock).toHaveBeenCalledWith(42);
   });
+
+  test("deve propagar o erro quando o banco falhar na remoção", async () => {
+    // PREPARAR — o pet existe, mas o delete quebra
+    removerMock.mockRejectedValue(new Error("Falha ao apagar no banco"));
+
+    // AGIR + VERIFICAR
+    await expect(removerPetUseCase(1)).rejects.toThrow("Falha ao apagar no banco");
+});
+
 });

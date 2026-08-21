@@ -79,4 +79,14 @@ describe("CardPet", () => {
     // VERIFICAR
     expect(screen.getByText(/25\/12\/2024/)).toBeInTheDocument();
   });
+
+  test("NÃO deve avisar o pai enquanto ninguém clicar em Remover", () => {
+// PREPARAR
+const aoRemover = jest.fn();
+// AGIR
+render(<CardPet pet={criarPetFake()} onRemover={aoRemover} />);
+// VERIFICAR
+expect(aoRemover).not.toHaveBeenCalled();
+});
+
 });
