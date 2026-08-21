@@ -71,4 +71,18 @@ describe("deletePetAction", () => {
     // AGIR + VERIFICAR
     await expect(deletePetAction([], 1)).rejects.toThrow("Erro ao remover pet");
   });
+
+  test("deve devolver a lista intacta quando o id não estiver nela", async () => {
+  // PREPARAR
+  const listaAtual = [criarPetFake({ id: 1 }), criarPetFake({ id: 2 })];
+  fetchMock.mockResolvedValue({ ok: true } as Response);
+
+  // AGIR
+  const resultado = await deletePetAction(listaAtual, 999); // id que não existe na lista
+
+  // VERIFICAR
+  expect(resultado).toEqual(listaAtual);
+  expect(resultado).not.toBe(listaAtual);
+});
+
 });
